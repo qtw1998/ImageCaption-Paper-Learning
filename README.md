@@ -1,2 +1,3 @@
 # ImageCaption-Paper-Learning
 Team with Learning the ImageCaption
+**5.14** qtw1998: Review RNN & CNN - Lao Chen: ..... Inputing...
