@@ -12,7 +12,7 @@ Team with Learning the ImageCaption</br>
 
 **5.20** qtw1998: README & CODES INSTRUCTIONS - rich1889: Writing & Rectify the Paper Report</br>
 
-#### Environments:**
+#### Environments:
 
 - Python 3.6
 - Tensorflow 1.8.0
