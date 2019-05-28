@@ -33,7 +33,7 @@ Team with Learning the ImageCaption</br>
 * **Matplotlib** ([instructions](https://scipy.org/install.html))
 * **tqdm** ([instructions](https://pypi.python.org/pypi/tqdm))
 * ./vocabulary.**csv**([download](https://pan.baidu.com/s/190UoiRt74d0nhVo_MizlQA))
-* ./train/captions_val2014**.json**([download](https://pan.baidu.com/s/1-IQjqOvaa2zL2A4o06P5lw))
+* ./train/captions_val2014 **.json** ([download](https://pan.baidu.com/s/1-IQjqOvaa2zL2A4o06P5lw))
 * utils/**coco**([download&unzip](https://pan.baidu.com/s/1_UOUyo_gr8ElIjeWPsmx0w))
 
 ### Usage
