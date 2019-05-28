@@ -1,0 +1,67 @@
+#!/usr/bin/python
+import tensorflow as tf
+import os
+from tqdm import tqdm
+from config import Config
+from model import CaptionGenerator
+from dataset import prepare_train_data, prepare_eval_data, prepare_test_data
+from django.http import HttpResponse
+
+
+MODEL_FILE = "/home/liyaox/tmp/show-attend-and-tell-master/models/289999.npy"
+ANDROID_IMAGE = "/home/liyaox/tmp/show-attend-and-tell-master/test/images/cache_image.jpg"
+
+
+"""
+ATTENTION:
+add the function ""test_fro_android" in base_model.py but now modify it in the present .py file
+there should be only one picture in ./test/images/ and no file output of results.csv and results.jpg
+"""
+
+
+def test_for_android(model, sess, test_data, vocabulary):
+    print("Testing the model ...")
+    config = model.config
+
+    if not os.path.exists(config.test_result_dir):
+        os.mkdir(config.test_result_dir)
+
+    captions = []
+
+    # Generate the captions for the images
+    for k in tqdm(list(range(test_data.num_batches)), desc='path'):
+        batch = test_data.next_batch()
+        caption_data = model.beam_search(sess, batch, vocabulary)
+
+        fake_cnt = 0 if k < test_data.num_batches - 1 \
+            else test_data.fake_count
+        for l in range(test_data.batch_size - fake_cnt):
+            word_idxs = caption_data[l][0].sentence
+            caption = vocabulary.get_sentence(word_idxs)
+            captions.append(caption)
+    print("Testing complete.")
+    return captions
+
+
+def reply(request):
+    if request.method == "POST":
+        image_bytes = request.POST.get("image_contents")
+        with open(ANDROID_IMAGE, "wb") as f:
+            f.write(image_bytes)
+        config = Config()
+        config.train_cnn = False
+        config.beam_size = 1
+        with tf.Session() as sess:
+            # testing phase for android app
+            data, vocabulary = prepare_test_data(config)
+            model = CaptionGenerator(config)
+            model.load(sess, MODEL_FILE)
+            tf.get_default_graph().finalize()
+            # model.test(sess, data, vocabulary)
+            # captions = model.test_for_android(sess, data, vocabulary)
+            captions = test_for_android(model, sess, data, vocabulary)
+        return HttpResponse(str(captions[0]))
+
+
+
+
